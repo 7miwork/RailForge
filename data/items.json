@@ -1,5 +1,9 @@
 {
-  "wood":     {"name": "Holz",     "stack": 99, "type": "resource", "color": "#8b4513"},
-  "stone":    {"name": "Stein",    "stack": 99, "type": "resource", "color": "#808080"},
-  "iron_ore": {"name": "Eisenerz", "stack": 99, "type": "resource", "color": "#a0522d"}
+  "wood":         {"name": "Holz",          "stack": 99, "type": "resource",   "color": "#8b4513"},
+  "stone":        {"name": "Stein",         "stack": 99, "type": "resource",   "color": "#808080"},
+  "iron_ore":     {"name": "Eisenerz",      "stack": 99, "type": "resource",   "color": "#a0522d"},
+  "plank":        {"name": "Brett",         "stack": 99, "type": "component",  "color": "#c8a165"},
+  "brick":        {"name": "Ziegel",        "stack": 99, "type": "component",  "color": "#b22222"},
+  "iron_ingot":   {"name": "Eisenbarren",   "stack": 99, "type": "component",  "color": "#b0c4de"},
+  "stone_pickaxe":{"name": "Steinspitzhacke","stack": 1, "type": "tool",      "color": "#696969"}
 }

@@ -1,19 +1,20 @@
 class_name Mining
 extends RefCounted
-## Abbau-Logik. Verbindet ResourceNode (Welt) mit Inventory (Core).
+## Abbau-Logik. Verbindet ResourceNode (Welt) mit Inventory und GameState (Core).
 
-## Baut einen Knoten ab und legt die Items ins Inventar.
+## Baut einen Knoten ab, legt die Items ins Inventar und zählt die
+## Abbau-Statistik (z. B. "wood_collected") hoch – auch dann, wenn das
+## Inventar voll ist und Items verfallen (siehe Hinweis unten).
 ## Gibt {"item_id", "amount", "leftover"} zurück.
-## Hinweis: Der Abbau erfolgt auch dann, wenn das Inventar voll ist –
-## die nicht passenden Items verfallen (leftover > 0). Bewusste Entscheidung
-## für Etappe 1.2, Inventar-Management kommt mit Crafting (1.3).
-static func mine_node(node: ResourceNode, inventory: Inventory) -> Dictionary:
+static func mine_node(node: ResourceNode, inventory: Inventory, game_state: GameState = null) -> Dictionary:
 	var result := node.mine()
 	if result.is_empty():
 		return {"item_id": "", "amount": 0, "leftover": 0}
 	var item_id := str(result.get("item_id", ""))
 	var amount := int(result.get("amount", 0))
 	var leftover := inventory.add_item(item_id, amount, ItemDB.max_stack(item_id))
+	if game_state != null:
+		game_state.add_stat(item_id + "_collected", amount)
 	return {"item_id": item_id, "amount": amount, "leftover": leftover}
 
 ## Nächsten ResourceNode aus einer Liste ab Position `from` finden.

@@ -25,8 +25,9 @@ func _ready() -> void:
 	visible = controls_visible
 	_center = size * 0.5
 	if controls_visible:
-		_make_action_button("interact", "E", 0.0)
-		_make_action_button("inventory_toggle", "I", BUTTON_SIZE + 12.0)
+		_make_action_button("crafting_toggle", "C", 0.0)
+		_make_action_button("interact", "E", BUTTON_SIZE + 12.0)
+		_make_action_button("inventory_toggle", "I", (BUTTON_SIZE + 12.0) * 2.0)
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:

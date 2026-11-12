@@ -1,0 +1,26 @@
+[
+  {
+    "id": "plank",
+    "output": {"item_id": "plank", "amount": 1},
+    "inputs": [{"item_id": "wood", "amount": 2}],
+    "unlock": {"type": "start"}
+  },
+  {
+    "id": "brick",
+    "output": {"item_id": "brick", "amount": 1},
+    "inputs": [{"item_id": "stone", "amount": 2}],
+    "unlock": {"type": "start"}
+  },
+  {
+    "id": "stone_pickaxe",
+    "output": {"item_id": "stone_pickaxe", "amount": 1},
+    "inputs": [{"item_id": "wood", "amount": 3}, {"item_id": "stone", "amount": 2}],
+    "unlock": {"type": "collected", "item_id": "wood", "amount": 5}
+  },
+  {
+    "id": "iron_ingot",
+    "output": {"item_id": "iron_ingot", "amount": 1},
+    "inputs": [{"item_id": "iron_ore", "amount": 2}, {"item_id": "wood", "amount": 1}],
+    "unlock": {"type": "collected", "item_id": "iron_ore", "amount": 5}
+  }
+]

@@ -13,9 +13,13 @@ var phase: int = 1
 var stage: String = "1.1" # Legacy-Feld, HUD liest aus Progress
 var stage_name: String = "Bewegung & Kamera" # Legacy-Feld
 var inventory: Inventory
+var stats: Dictionary = {} # z. B. {"wood_collected": 5}
 
 func _init() -> void:
 	inventory = Inventory.new()
+
+func add_stat(key: String, amount: int) -> void:
+	stats[key] = int(stats.get(key, 0)) + amount
 
 func to_dict() -> Dictionary:
 	return {
@@ -27,6 +31,7 @@ func to_dict() -> Dictionary:
 		"stage": stage,
 		"stage_name": stage_name,
 		"inventory": inventory.to_dict(),
+		"stats": stats.duplicate(),
 	}
 
 static func from_dict(data: Dictionary) -> GameState:
@@ -39,4 +44,7 @@ static func from_dict(data: Dictionary) -> GameState:
 	s.stage = data.get("stage", "1.1")
 	s.stage_name = data.get("stage_name", "Bewegung & Kamera")
 	s.inventory = Inventory.from_dict(data.get("inventory", {}))
+	var saved_stats: Variant = data.get("stats", {})
+	if saved_stats is Dictionary:
+		s.stats = saved_stats.duplicate()
 	return s

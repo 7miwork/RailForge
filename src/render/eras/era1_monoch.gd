@@ -1,7 +1,7 @@
 class_name Era1Monoch
 extends EraRenderer
 ## Renderer für Ära 1 (Monochrom / Game Boy).
-## In Etappe 1.2: Mechanik (Abbau, Inventar) + HUD/Inventar-UI-Anbindung.
+## In Etappe 1.3: Mechanik (Abbau, Inventar, Crafting) + HUD/Inventar/Crafting-UI.
 ## Game-Boy-Optik (4 Grünstufen, Tiles) kommt in Etappe 1.6.
 
 func mount(parent: Node) -> void:
@@ -17,6 +17,9 @@ func draw_state(_state: GameState) -> void:
 	var inv_ui := get_tree().get_first_node_in_group("inventory_ui") as InventoryUI
 	if inv_ui != null:
 		inv_ui.refresh()
+	var craft_ui := get_tree().get_first_node_in_group("crafting_ui") as CraftingUI
+	if craft_ui != null:
+		craft_ui.refresh()
 
 func handle_input(_event: InputEvent) -> void:
 	pass

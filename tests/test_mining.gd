@@ -57,6 +57,32 @@ func test_mine_node_depleted_returns_empty() -> void:
 	assert_eq(str(result.get("item_id")), "")
 	node.free()
 
+func test_mine_node_counts_stats() -> void:
+	var node := ResourceNode.new()
+	node.item_id = "wood"
+	node.amount = 3
+	node.amount_per_hit = 1
+	var state := GameState.new()
+
+	Mining.mine_node(node, state.inventory, state)
+	Mining.mine_node(node, state.inventory, state)
+	assert_eq(int(state.stats.get("wood_collected", 0)), 2)
+	node.free()
+
+func test_mine_node_stats_even_with_leftover() -> void:
+	# Abbau passiert physisch auch bei vollem Inventar → Stats zählen trotzdem.
+	var node := ResourceNode.new()
+	node.item_id = "iron_ore"
+	node.amount = 5
+	node.amount_per_hit = 1
+	var state := GameState.new()
+	state.inventory.add_item("iron_ore", Inventory.MAX_SLOTS * 99, 99)
+
+	var result := Mining.mine_node(node, state.inventory, state)
+	assert_gt(int(result.get("leftover")), 0)
+	assert_eq(int(state.stats.get("iron_ore_collected", 0)), 1)
+	node.free()
+
 func test_find_nearest_node() -> void:
 	var near := ResourceNode.new()
 	near.position = Vector2(90, 0)

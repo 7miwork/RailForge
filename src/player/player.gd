@@ -45,7 +45,7 @@ func _try_mine() -> void:
 	var node := Mining.find_nearest_node(nodes, global_position)
 	if node == null:
 		return
-	Mining.mine_node(node, state.inventory)
+	Mining.mine_node(node, state.inventory, state)
 	if node.is_depleted():
 		node.queue_free()
 	inventory_changed.emit()
