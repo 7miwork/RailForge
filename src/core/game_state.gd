@@ -9,9 +9,20 @@ var version: int = SAVE_VERSION
 var era: int = 1
 var tick: int = 0
 var features: Dictionary = {} # Feature-Flags pro Ära
+var phase: int = 1
+var stage: String = "1.1"
+var stage_name: String = "Bewegung & Kamera"
 
 func to_dict() -> Dictionary:
-	return {"version": version, "era": era, "tick": tick, "features": features}
+	return {
+		"version": version,
+		"era": era,
+		"tick": tick,
+		"features": features,
+		"phase": phase,
+		"stage": stage,
+		"stage_name": stage_name,
+	}
 
 static func from_dict(data: Dictionary) -> GameState:
 	var s := GameState.new()
@@ -19,4 +30,7 @@ static func from_dict(data: Dictionary) -> GameState:
 	s.era = data.get("era", 1)
 	s.tick = data.get("tick", 0)
 	s.features = data.get("features", {})
+	s.phase = data.get("phase", 1)
+	s.stage = data.get("stage", "1.1")
+	s.stage_name = data.get("stage_name", "Bewegung & Kamera")
 	return s
