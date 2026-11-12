@@ -1,0 +1,5 @@
+{
+  "wood":     {"name": "Holz",     "stack": 99, "type": "resource", "color": "#8b4513"},
+  "stone":    {"name": "Stein",    "stack": 99, "type": "resource", "color": "#808080"},
+  "iron_ore": {"name": "Eisenerz", "stack": 99, "type": "resource", "color": "#a0522d"}
+}

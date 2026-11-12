@@ -19,9 +19,13 @@ func current_stage() -> Dictionary:
 			return stage
 	return {}
 
-## ID der aktuellen Etappe, z. B. "1.1".
+## ID der aktuellen Etappe, z. B. "1.2".
 func current_stage_id() -> String:
 	return str(current_stage().get("id", ""))
+
+## Name der aktuellen Etappe.
+func current_stage_name() -> String:
+	return str(current_stage().get("name", ""))
 
 ## Markiert eine Etappe als erledigt.
 func mark_done(stage_id: String) -> void:

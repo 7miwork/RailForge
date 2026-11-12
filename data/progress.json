@@ -2,7 +2,7 @@
   "phase": 1,
   "phase_name": "Monochrom (Game Boy)",
   "stages": [
-    {"id": "1.1", "name": "Bewegung & Kamera", "done": false},
+    {"id": "1.1", "name": "Bewegung & Kamera", "done": true},
     {"id": "1.2", "name": "Handabbau & Inventar", "done": false},
     {"id": "1.3", "name": "Handcrafting", "done": false},
     {"id": "1.4", "name": "Speichern/Laden & Debug-Menü", "done": false},

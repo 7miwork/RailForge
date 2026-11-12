@@ -1,13 +1,15 @@
 class_name TouchControls
 extends Control
-## Virtueller Joystick (links unten). Übersetzt Touch/Maus-Drag in die
-## move_*-Input-Aktionen, sodass dieselbe Bewegung wie per Tastatur entsteht.
+## Virtueller Joystick (links unten) plus Aktions-Buttons (rechts unten:
+## „E" für Abbau, „I" für Inventar). Übersetzt Eingabe in die
+## move_*/interact/inventory_toggle-Input-Aktionen.
 ## Sichtbar nur auf Touch-Geräten, mobil oder im Editor (Maus-Test per
 ## emulate_touch_from_mouse).
 
 const RADIUS := 64.0
 const KNOB_RADIUS := 26.0
 const DEADZONE := 0.25
+const BUTTON_SIZE := 56.0
 
 var _center := Vector2.ZERO
 var _knob_offset := Vector2.ZERO
@@ -15,17 +17,38 @@ var _dragging := false
 var _drag_index := -1
 
 func _ready() -> void:
-	visible = (
+	var controls_visible := (
 		DisplayServer.is_touchscreen_available()
 		or OS.has_feature("mobile")
 		or OS.has_feature("editor")
 	)
+	visible = controls_visible
 	_center = size * 0.5
+	if controls_visible:
+		_make_action_button("interact", "E", 0.0)
+		_make_action_button("inventory_toggle", "I", BUTTON_SIZE + 12.0)
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		_center = size * 0.5
 		queue_redraw()
+
+## Button unten rechts, der eine Input-Aktion per Druck/Loslassen auslöst.
+func _make_action_button(action: StringName, text: String, y_offset: float) -> void:
+	var btn := Button.new()
+	btn.text = text
+	btn.focus_mode = Control.FOCUS_NONE
+	btn.custom_minimum_size = Vector2(BUTTON_SIZE, BUTTON_SIZE)
+	# Unten rechts im UI-Canvas (Elternteil ist die UI-CanvasLayer).
+	btn.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	btn.offset_left = -BUTTON_SIZE - 16.0
+	btn.offset_right = -16.0
+	btn.offset_top = -BUTTON_SIZE - 16.0 - y_offset
+	btn.offset_bottom = -16.0 - y_offset
+	btn.button_down.connect(func() -> void: Input.action_press(action))
+	btn.button_up.connect(func() -> void: Input.action_release(action))
+	# Deferred: _ready läuft während des Szenen-Setups, add_child wäre sonst blockiert.
+	get_parent().add_child.call_deferred(btn)
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:

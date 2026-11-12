@@ -1,6 +1,6 @@
 class_name ProgressHud
 extends CanvasLayer
-## Fortschrittsanzeige: „Phase X – Etappe Y: Name" aus GameState/Progress.
+## Fortschrittsanzeige: „Phase X – Etappe Y: Name" aus Progress.current_stage().
 ## Game-Boy-Palette als Platzhalter (echte Optik ab Etappe 1.6).
 
 const COLOR_BG := Color("#9bbc0f")
@@ -26,11 +26,9 @@ func setup(p_progress: Progress, p_state: GameState) -> void:
 	refresh()
 
 func refresh() -> void:
-	if state == null:
+	if progress == null or state == null:
 		return
-	var stage_name := state.stage_name
-	if progress != null:
-		var current := progress.current_stage()
-		if not current.is_empty():
-			stage_name = str(current.get("name", stage_name))
-	label.text = "Phase %d – Etappe %s: %s" % [state.phase, state.stage, stage_name]
+	var current := progress.current_stage()
+	var stage_id := str(current.get("id", state.stage))
+	var stage_label := str(current.get("name", state.stage_name))
+	label.text = "Phase %d – Etappe %s: %s" % [state.phase, stage_id, stage_label]

@@ -10,8 +10,12 @@ var era: int = 1
 var tick: int = 0
 var features: Dictionary = {} # Feature-Flags pro Ära
 var phase: int = 1
-var stage: String = "1.1"
-var stage_name: String = "Bewegung & Kamera"
+var stage: String = "1.1" # Legacy-Feld, HUD liest aus Progress
+var stage_name: String = "Bewegung & Kamera" # Legacy-Feld
+var inventory: Inventory
+
+func _init() -> void:
+	inventory = Inventory.new()
 
 func to_dict() -> Dictionary:
 	return {
@@ -22,6 +26,7 @@ func to_dict() -> Dictionary:
 		"phase": phase,
 		"stage": stage,
 		"stage_name": stage_name,
+		"inventory": inventory.to_dict(),
 	}
 
 static func from_dict(data: Dictionary) -> GameState:
@@ -33,4 +38,5 @@ static func from_dict(data: Dictionary) -> GameState:
 	s.phase = data.get("phase", 1)
 	s.stage = data.get("stage", "1.1")
 	s.stage_name = data.get("stage_name", "Bewegung & Kamera")
+	s.inventory = Inventory.from_dict(data.get("inventory", {}))
 	return s
