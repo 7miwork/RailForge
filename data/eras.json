@@ -1,0 +1,9 @@
+[
+  {"id": 1, "name": "Monochrom (Game Boy)", "render": "2d", "unlock": "start"},
+  {"id": 2, "name": "8-Bit-Farbe (NES)", "render": "2d", "unlock": "TBD"},
+  {"id": 3, "name": "16-Bit (SNES)", "render": "2d", "unlock": "TBD"},
+  {"id": 4, "name": "Isometrisch 2.5D", "render": "2d", "unlock": "TBD"},
+  {"id": 5, "name": "Früh-3D (PS1-Look)", "render": "3d", "unlock": "TBD"},
+  {"id": 6, "name": "Modernes 3D", "render": "3d", "unlock": "TBD"},
+  {"id": 7, "name": "Endgame", "render": "3d", "unlock": "TBD"}
+]

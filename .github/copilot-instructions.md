@@ -1,0 +1,43 @@
+# Railforge – Regeln für GitHub Copilot
+Ziel: Desktop-Spiel (Windows/Mac/Linux, später Android/iOS): Automatisierung (Factorio/Satisfactory/DSP)
++ Transport Tycoon + RPG. Spielverlauf = Evolution der Videospielgrafik (wie Evoland), jede Phase = Ära.
+Details: AGENTS.md, docs/PHASEN_GUIDE.md, docs/GDD.md.
+
+## Etappen
+- Jede Phase wird in Etappen (Schritte) unterteilt. Jede Etappe hat ein Done-Kriterium.
+- Der Spielstand bleibt zwischen Etappen erhalten.
+- Fortschrittsanzeige (Phase + Etappe) im Spiel sichtbar, implementiert ab Phase 1.
+- Phase 0 baut nur die Struktur; Spielcode beginnt in Phase 1, Etappe 1.1.
+
+## Git-Strategie
+- NUR `main`. Kein Branch pro Phase, kein PR pro Phase.
+- Ein Commit pro Etappe. Ein Tag pro abgeschlossener Phase (`phase-N-…`).
+- Rollback per `git checkout <tag>`.
+
+## Technik
+- Godot 4.3+, GDScript, Renderer GL Compatibility. KEIN Web-Spiel.
+- Mobile-tauglich von Anfang an: Eingabe nur über Input-Map-Aktionen (Maus UND Touch),
+  skalierbare UI, keine festen Tastatur-Annahmen.
+
+## Architektur
+- src/core/ = Logik + Spielstand (RefCounted, KEINE Nodes, kein Rendering), testbar.
+- src/render/eras/ = ein Renderer pro Ära, erbt von EraRenderer (src/render/era_renderer.gd).
+  Ära-Wechsel tauscht nur den Renderer, der Spielstand bleibt.
+- Ära 1-4: 2D, ab Ära 5: 3D (Low-Poly).
+- Mechaniken per Feature-Flags pro Ära freischalten.
+- Daten (Rezepte, Gebäude, Forschung, Ären) als JSON in data/, nicht im Code.
+- Speichern mit Versionsnummer (user://).
+- Debug-Menü: Ära wechseln, Ressourcen cheaten.
+- Fortschrittsanzeige: Phase + Etappe aus Spielstand im Renderer anzeigen.
+- Tests ab Phase 1 mit GUT.
+
+## Stil
+- Kommentare Deutsch, Variablen/Funktionen Englisch (snake_case), kleine Dateien, statische Typisierung.
+- Binärdateien (Assets) nur bei Bedarf, .godot/ nie committen.
+
+## Ablauf
+- Auf `main` arbeiten. Commit pro Etappe, Tag pro Phase. Danach STOPP und auf Freigabe warten.
+- Am Phasenende aktualisieren: CHANGELOG.md, docs/PHASEN_GUIDE.md, AGENTS.md, .clinerules,
+  .github/copilot-instructions.md, README, GDD.
+- Frühere Ären dürfen nicht kaputtgehen.
+- Projekt öffnen: Godot 4.3+ → Projekt importieren → project.godot.
