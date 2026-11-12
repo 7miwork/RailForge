@@ -46,5 +46,7 @@ static func from_dict(data: Dictionary) -> GameState:
 	s.inventory = Inventory.from_dict(data.get("inventory", {}))
 	var saved_stats: Variant = data.get("stats", {})
 	if saved_stats is Dictionary:
-		s.stats = saved_stats.duplicate()
+		# JSON-Roundtrip liefert Zahlen als float → zurück auf int normalisieren.
+		for key: String in saved_stats:
+			s.stats[key] = int(saved_stats[key])
 	return s

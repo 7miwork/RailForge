@@ -20,6 +20,9 @@ func draw_state(_state: GameState) -> void:
 	var craft_ui := get_tree().get_first_node_in_group("crafting_ui") as CraftingUI
 	if craft_ui != null:
 		craft_ui.refresh()
+	var debug_ui := get_tree().get_first_node_in_group("debug_overlay") as DebugOverlay
+	if debug_ui != null:
+		debug_ui.refresh_info()
 
 func handle_input(_event: InputEvent) -> void:
 	pass
