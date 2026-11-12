@@ -5,6 +5,6 @@ extends RefCounted
 static func load_json(path: String) -> Variant:
 	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
-		push_error("Datei nicht lesbar: %s" % path)
+		push_warning("Datei nicht lesbar: %s" % path)
 		return null
 	return JSON.parse_string(file.get_as_text())

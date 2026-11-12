@@ -25,19 +25,33 @@ static func all_recipes() -> Array:
 	_ensure_loaded()
 	return _recipes
 
-## Prüft, ob ein Rezept freigeschaltet ist.
-## unlock.type "start" → immer; "collected" → GameState.stats reicht;
-## unbekannte Typen → false (defensiv).
-static func is_unlocked(recipe: Dictionary, game_state: GameState) -> bool:
+## Prüft Unlock-Bedingung gegen ein reines Stats-Dict (ohne GameState).
+static func is_recipe_unlocked(recipe: Dictionary, stats: Dictionary) -> bool:
 	var unlock: Dictionary = recipe.get("unlock", {})
 	match str(unlock.get("type", "")):
 		"start":
 			return true
 		"collected":
 			var key := str(unlock.get("item_id", "")) + "_collected"
-			return int(game_state.stats.get(key, 0)) >= int(unlock.get("amount", 0))
+			return int(stats.get(key, 0)) >= int(unlock.get("amount", 0))
 		_:
 			return false
+
+## Prüft, ob ein Rezept freigeschaltet ist (GameState-Variante).
+static func is_unlocked(recipe: Dictionary, game_state: GameState) -> bool:
+	return is_recipe_unlocked(recipe, game_state.stats)
+
+## Rezept-IDs, die zwischen altem und neuem Stats-Stand NEU freigeschaltet wurden.
+## "start"-Rezepte werden ignoriert (sie waren nie „gesperrt").
+static func newly_unlocked(old_stats: Dictionary, new_stats: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	for recipe: Dictionary in all_recipes():
+		var unlock: Dictionary = recipe.get("unlock", {})
+		if str(unlock.get("type", "")) != "collected":
+			continue
+		if not is_recipe_unlocked(recipe, old_stats) and is_recipe_unlocked(recipe, new_stats):
+			result.append(str(recipe.get("id", "")))
+	return result
 
 static func unlocked_recipes(game_state: GameState) -> Array:
 	var result: Array = []

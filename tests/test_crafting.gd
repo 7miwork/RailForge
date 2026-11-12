@@ -22,20 +22,35 @@ func test_craft_plank_success() -> void:
 	assert_eq(inv.count_item("wood"), 0)
 	assert_eq(inv.count_item("plank"), 1)
 
-func test_craft_missing_inputs() -> void:
+func test_craft_missing_inputs_keeps_stats() -> void:
 	inv.add_item("wood", 1, 99)
 	var result := Crafting.craft("plank", inv, state)
 	assert_false(bool(result.get("ok")))
 	assert_eq(str(result.get("reason")), "missing")
-	assert_eq(inv.count_item("wood"), 1) # unverändert
+	assert_true(state.stats.is_empty())
 
-func test_craft_locked_recipe() -> void:
+func test_craft_locked_keeps_stats() -> void:
 	inv.add_item("wood", 3, 99)
 	inv.add_item("stone", 2, 99)
 	var result := Crafting.craft("stone_pickaxe", inv, state)
 	assert_false(bool(result.get("ok")))
 	assert_eq(str(result.get("reason")), "locked")
-	assert_eq(inv.count_item("wood"), 3) # unverändert
+	assert_eq(inv.count_item("wood"), 3) # Inventar unverändert
+	assert_true(state.stats.is_empty())
+
+func test_craft_inventory_full_keeps_stats() -> void:
+	# 19 Slots Stein + 1 Slot Holz: plank-Input (2x wood) ist vorhanden,
+	# aber plank-Output passt nicht (0 leere Slots, kein plank-Stack).
+	for i in Inventory.MAX_SLOTS - 1:
+		inv.slots[i] = {"item_id": "stone", "amount": 99}
+	inv.slots[Inventory.MAX_SLOTS - 1] = {"item_id": "wood", "amount": 99}
+
+	var result := Crafting.craft("plank", inv, state)
+	assert_false(bool(result.get("ok")))
+	assert_eq(str(result.get("reason")), "inventory_full")
+	assert_eq(inv.count_item("wood"), 99) # wood NICHT abgebucht
+	assert_eq(inv.count_item("plank"), 0)
+	assert_true(state.stats.is_empty())
 
 func test_craft_pickaxe_after_unlock() -> void:
 	state.stats["wood_collected"] = 5
@@ -51,19 +66,6 @@ func test_craft_unknown_recipe() -> void:
 	var result := Crafting.craft("does_not_exist", inv, state)
 	assert_false(bool(result.get("ok")))
 	assert_eq(str(result.get("reason")), "unknown")
-
-func test_craft_inventory_full_keeps_inputs() -> void:
-	# 19 Slots Stein + 1 Slot Holz: plank-Input (2x wood) ist vorhanden,
-	# aber plank-Output passt nicht (0 leere Slots, kein plank-Stack).
-	for i in Inventory.MAX_SLOTS - 1:
-		inv.slots[i] = {"item_id": "stone", "amount": 99}
-	inv.slots[Inventory.MAX_SLOTS - 1] = {"item_id": "wood", "amount": 99}
-
-	var result := Crafting.craft("plank", inv, state)
-	assert_false(bool(result.get("ok")))
-	assert_eq(str(result.get("reason")), "inventory_full")
-	assert_eq(inv.count_item("wood"), 99) # wood NICHT abgebucht
-	assert_eq(inv.count_item("plank"), 0)
 
 func test_unlocked_recipes_counts() -> void:
 	assert_eq(RecipeDB.unlocked_recipes(state).size(), 2) # plank, brick

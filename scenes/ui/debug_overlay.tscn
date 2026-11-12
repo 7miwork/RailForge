@@ -33,6 +33,24 @@ size_flags_horizontal = 3
 [node name="ItemRow" type="HBoxContainer" parent="Panel/VBox"]
 theme_override_constants/separation = 4
 
+[node name="StageSection" type="VBoxContainer" parent="Panel/VBox"]
+theme_override_constants/separation = 2
+
+[node name="StageTitle" type="Label" parent="Panel/VBox/StageSection"]
+text = "Etappen (Dev):"
+
+[node name="StageList" type="VBoxContainer" parent="Panel/VBox/StageSection"]
+theme_override_constants/separation = 2
+
+[node name="StageButtons" type="HBoxContainer" parent="Panel/VBox"]
+theme_override_constants/separation = 6
+
+[node name="NextStageButton" type="Button" parent="Panel/VBox/StageButtons"]
+text = "Nächste Etappe"
+
+[node name="ResetProgressButton" type="Button" parent="Panel/VBox/StageButtons"]
+text = "Progress reset"
+
 [node name="DeleteButton" type="Button" parent="Panel/VBox"]
 text = "Save löschen"
 
@@ -45,4 +63,6 @@ dialog_text = "Der aktuelle Spielstand wird unwiderruflich gelöscht."
 ok_button_text = "Löschen"
 
 [connection signal="pressed" from="Panel/VBox/DeleteButton" to="." method="_on_delete_pressed"]
+[connection signal="pressed" from="Panel/VBox/StageButtons/NextStageButton" to="." method="_on_next_stage_pressed"]
+[connection signal="pressed" from="Panel/VBox/StageButtons/ResetProgressButton" to="." method="_on_reset_progress_pressed"]
 [connection signal="confirmed" from="ConfirmDialog" to="." method="_on_confirm_delete"]

@@ -69,6 +69,23 @@ func test_mine_node_counts_stats() -> void:
 	assert_eq(int(state.stats.get("wood_collected", 0)), 2)
 	node.free()
 
+func test_mine_node_returns_before_after_stats() -> void:
+	var node := ResourceNode.new()
+	node.item_id = "wood"
+	node.amount = 2
+	node.amount_per_hit = 1
+	var state := GameState.new()
+
+	var result := Mining.mine_node(node, state.inventory, state)
+	var before: Dictionary = result.get("before_stats", {})
+	var after: Dictionary = result.get("after_stats", {})
+	assert_eq(int(before.get("wood_collected", 0)), 0)
+	assert_eq(int(after.get("wood_collected", 0)), 1)
+	# Deep-Duplicate: Änderungen an after_stats dürfen before_stats nicht beeinflussen.
+	after["wood_collected"] = 999
+	assert_eq(int(before.get("wood_collected", 0)), 0)
+	node.free()
+
 func test_mine_node_stats_even_with_leftover() -> void:
 	# Abbau passiert physisch auch bei vollem Inventar → Stats zählen trotzdem.
 	var node := ResourceNode.new()

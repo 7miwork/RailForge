@@ -10,6 +10,7 @@ signal inventory_changed
 @export var world_size: Vector2 = Vector2(2000.0, 2000.0)
 
 var state: GameState
+var main_ref: Node
 
 @onready var interaction_area: Area2D = $InteractionArea
 
@@ -19,8 +20,9 @@ func _ready() -> void:
 	image.fill(Color("#2f5d2f"))
 	$Sprite2D.texture = ImageTexture.create_from_image(image)
 
-func setup(p_state: GameState) -> void:
+func setup(p_state: GameState, p_main: Node = null) -> void:
 	state = p_state
+	main_ref = p_main
 
 func _physics_process(_delta: float) -> void:
 	var input_vec := Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -45,7 +47,11 @@ func _try_mine() -> void:
 	var node := Mining.find_nearest_node(nodes, global_position)
 	if node == null:
 		return
-	Mining.mine_node(node, state.inventory, state)
+	var result := Mining.mine_node(node, state.inventory, state)
 	if node.is_depleted():
 		node.queue_free()
 	inventory_changed.emit()
+	# Ergebnis (inkl. Stats-Vorher/Nachher) an main weiterreichen,
+	# z. B. für Freischalt-Toasts.
+	if main_ref != null and main_ref.has_method("on_resource_mined"):
+		main_ref.on_resource_mined(result)

@@ -1,7 +1,8 @@
 class_name DebugOverlay
 extends CanvasLayer
 ## Debug-Overlay (nur Entwicklung): Ära wechseln, Ressourcen +10,
-## Save löschen, letzter Speicherzeitpunkt. Reine UI, keine Core-Logik.
+## Etappen-Fortschritt (Dev), Save löschen, letzter Speicherzeitpunkt.
+## Reine UI, keine Core-Logik.
 
 signal era_changed(era_id: int)
 signal state_changed
@@ -15,9 +16,11 @@ var game_state: GameState
 var main_ref: Node
 
 var _era_ids: Array[int] = []
+var _stage_checks: Dictionary = {} # stage_id -> CheckBox
 
 @onready var era_option: OptionButton = $Panel/VBox/EraRow/EraOption
 @onready var item_box: HBoxContainer = $Panel/VBox/ItemRow
+@onready var stage_list: VBoxContainer = $Panel/VBox/StageSection/StageList
 @onready var info_label: Label = $Panel/VBox/InfoLabel
 @onready var confirm_dialog: ConfirmationDialog = $ConfirmDialog
 
@@ -29,16 +32,20 @@ func _ready() -> void:
 	$Panel.add_theme_stylebox_override("panel", style)
 	_build_eras()
 	_build_item_buttons()
+	_build_stage_rows()
 	visible = false
 
 func bind(p_state: GameState, p_main: Node) -> void:
 	game_state = p_state
 	main_ref = p_main
+	_select_era_option()
+	_sync_stage_checks()
 	refresh_info()
 
 func toggle() -> void:
 	visible = not visible
 	if visible:
+		_sync_stage_checks()
 		refresh_info()
 
 func refresh_info() -> void:
@@ -60,7 +67,6 @@ func _build_eras() -> void:
 		_era_ids.append(int(era.get("id", 0)))
 		era_option.add_item(str(era.get("name", "?")))
 	era_option.item_selected.connect(_on_era_selected)
-	_select_era_option()
 
 func _select_era_option() -> void:
 	if game_state == null:
@@ -84,6 +90,48 @@ func _on_add_resource(item_id: String) -> void:
 	if game_state == null:
 		return
 	game_state.inventory.add_item(item_id, 10, ItemDB.max_stack(item_id))
+	state_changed.emit()
+
+## Etappen-Sektion: eine Zeile pro Etappe aus Progress.all_stages().
+func _build_stage_rows() -> void:
+	for stage: Dictionary in Progress.all_stages():
+		var stage_id := str(stage.get("id", ""))
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 6)
+
+		var check := CheckBox.new()
+		check.text = stage_id
+		check.toggled.connect(_on_stage_toggled.bind(stage_id))
+		row.add_child(check)
+
+		var label := Label.new()
+		label.text = str(stage.get("name", ""))
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(label)
+
+		stage_list.add_child(row)
+		_stage_checks[stage_id] = check
+
+func _sync_stage_checks() -> void:
+	for stage_id: String in _stage_checks:
+		var check: CheckBox = _stage_checks[stage_id]
+		check.set_pressed_no_signal(Progress.is_done(stage_id))
+
+func _on_stage_toggled(value: bool, stage_id: String) -> void:
+	var stage := Progress.stage_by_id(stage_id)
+	if not stage.is_empty():
+		stage["done"] = value
+	state_changed.emit()
+
+func _on_next_stage_pressed() -> void:
+	var current := Progress.current_stage()
+	if not current.is_empty():
+		current["done"] = true
+	state_changed.emit()
+
+func _on_reset_progress_pressed() -> void:
+	Progress.reset_progress()
+	_sync_stage_checks()
 	state_changed.emit()
 
 func _on_delete_pressed() -> void:

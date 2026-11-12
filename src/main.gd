@@ -12,17 +12,16 @@ extends Node
 @onready var touch_controls: TouchControls = $UI/TouchControls
 
 var state: GameState
-var progress: Progress
 var renderer: EraRenderer
+var _last_stage_id := ""
 
 func _ready() -> void:
-	progress = Progress.new()
 	state = SaveManager.load_state()
 
 	renderer = Era1Monoch.new()
 	renderer.mount(self)
 
-	progress_hud.setup(progress, state)
+	progress_hud.setup(state)
 
 	# Signal-Verdrahtung einmalig (unabhängig vom GameState).
 	player.inventory_changed.connect(inventory_ui.refresh)
@@ -44,9 +43,17 @@ func _ready() -> void:
 	# Spieler startet in der Mitte der Welt, Kamera darauf.
 	player.position = world_size() * 0.5
 	camera.position = player.position
+	_last_stage_id = Progress.current_stage_id()
 
 func _process(_delta: float) -> void:
 	camera.position = player.position
+
+	# Etappen-Wechsel-Toast (z. B. nach Debug-Markierung).
+	var current_id := Progress.current_stage_id()
+	if current_id != _last_stage_id:
+		if _last_stage_id != "":
+			progress_hud.toast("Etappe %s abgeschlossen" % _last_stage_id)
+		_last_stage_id = current_id
 
 	# Polling statt _unhandled_input: Touch-Buttons nutzen Input.action_press().
 	if Input.is_action_just_pressed("save_game"):
@@ -74,10 +81,11 @@ func _load_game() -> void:
 	progress_hud.flash("Geladen" if SaveManager.exists() else "Kein Save gefunden")
 
 func _apply_state_to_ui() -> void:
-	player.setup(state)
+	player.setup(state, self)
 	inventory_ui.bind_inventory(state.inventory)
 	crafting_ui.bind(state)
 	debug_overlay.bind(state, self)
+	progress_hud.setup(state)
 	refresh_all_ui()
 
 func refresh_all_ui() -> void:
@@ -86,8 +94,17 @@ func refresh_all_ui() -> void:
 	crafting_ui.refresh()
 	debug_overlay.refresh_info()
 
+## Vom Player nach jedem Abbau aufgerufen (enthält before/after_stats).
+func on_resource_mined(result: Dictionary) -> void:
+	var before: Dictionary = result.get("before_stats", {})
+	var after: Dictionary = result.get("after_stats", {})
+	for recipe_id: String in RecipeDB.newly_unlocked(before, after):
+		var recipe := RecipeDB.get_recipe(recipe_id)
+		var item_id := str(recipe.get("output", {}).get("item_id", ""))
+		progress_hud.toast("Freigeschaltet: %s" % ItemDB.display_name(item_id))
+
 func on_era_changed(era_id: int) -> void:
-	# In Etappe 1.4 nur Spielstand-Feld + Log; echter Renderer-Tausch
+	# In Etappe 1.5 nur Spielstand-Feld + Log; echter Renderer-Tausch
 	# kommt in späteren Phasen.
 	state.era = era_id
 	print("Debug: Ära gewechselt zu %d" % era_id)

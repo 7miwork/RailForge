@@ -14,7 +14,37 @@ offset_bottom = 16.0
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 theme_override_constants/separation = 2
 
-[node name="Label" type="Label" parent="Panel/VBox"]
+[node name="StageLine" type="Label" parent="Panel/VBox"]
+
+[node name="NameLine" type="Label" parent="Panel/VBox"]
+
+[node name="Bar" type="ProgressBar" parent="Panel/VBox"]
+custom_minimum_size = Vector2(0, 8)
+min_value = 0.0
+max_value = 1.0
+step = 0.01
+show_percentage = false
+
+[node name="StatsLine" type="Label" parent="Panel/VBox"]
 
 [node name="FlashLabel" type="Label" parent="Panel/VBox"]
 visible = false
+
+[node name="ToastPanel" type="PanelContainer" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -56.0
+offset_right = 200.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+visible = false
+
+[node name="VBox" type="VBoxContainer" parent="ToastPanel"]
+
+[node name="ToastLabel" type="Label" parent="ToastPanel/VBox"]
+horizontal_alignment = 1

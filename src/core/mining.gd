@@ -9,13 +9,21 @@ extends RefCounted
 static func mine_node(node: ResourceNode, inventory: Inventory, game_state: GameState = null) -> Dictionary:
 	var result := node.mine()
 	if result.is_empty():
-		return {"item_id": "", "amount": 0, "leftover": 0}
+		return {"item_id": "", "amount": 0, "leftover": 0, "before_stats": {}, "after_stats": {}}
 	var item_id := str(result.get("item_id", ""))
 	var amount := int(result.get("amount", 0))
+	var before_stats: Dictionary = game_state.stats.duplicate(true) if game_state != null else {}
 	var leftover := inventory.add_item(item_id, amount, ItemDB.max_stack(item_id))
 	if game_state != null:
 		game_state.add_stat(item_id + "_collected", amount)
-	return {"item_id": item_id, "amount": amount, "leftover": leftover}
+	var after_stats: Dictionary = game_state.stats.duplicate(true) if game_state != null else {}
+	return {
+		"item_id": item_id,
+		"amount": amount,
+		"leftover": leftover,
+		"before_stats": before_stats,
+		"after_stats": after_stats,
+	}
 
 ## Nächsten ResourceNode aus einer Liste ab Position `from` finden.
 static func find_nearest_node(nodes: Array, from: Vector2) -> ResourceNode:
