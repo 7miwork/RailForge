@@ -1,12 +1,28 @@
 {
-  "phase": 1,
-  "phase_name": "Monochrom (Game Boy)",
-  "stages": [
-    {"id": "1.1", "name": "Bewegung & Kamera", "done": true},
-    {"id": "1.2", "name": "Handabbau & Inventar", "done": true},
-    {"id": "1.3", "name": "Handcrafting", "done": true},
-    {"id": "1.4", "name": "Speichern/Laden & Debug-Menü", "done": true},
-    {"id": "1.5", "name": "Fortschrittsanzeige & GUT-Tests", "done": true},
-    {"id": "1.6", "name": "Game-Boy-Look & Polish", "done": false}
+  "phases": [
+    {
+      "phase": 1,
+      "phase_name": "Monochrom (Game Boy)",
+      "stages": [
+        {"id": "1.1", "name": "Bewegung & Kamera", "done": true},
+        {"id": "1.2", "name": "Handabbau & Inventar", "done": true},
+        {"id": "1.3", "name": "Handcrafting", "done": true},
+        {"id": "1.4", "name": "Speichern/Laden & Debug-Menü", "done": true},
+        {"id": "1.5", "name": "Fortschrittsanzeige & GUT-Tests", "done": true},
+        {"id": "1.6", "name": "Game-Boy-Look & Polish", "done": true}
+      ]
+    },
+    {
+      "phase": 2,
+      "phase_name": "8-Bit-Farbe (NES)",
+      "stages": [
+        {"id": "2.1", "name": "Ära-Wechsel und NES-Renderer", "done": false},
+        {"id": "2.2", "name": "Skills durch Wiederholung", "done": false},
+        {"id": "2.3", "name": "Bau-Modus, Raster und Miner", "done": false},
+        {"id": "2.4", "name": "Förderbänder", "done": false},
+        {"id": "2.5", "name": "Schmelzofen", "done": false},
+        {"id": "2.6", "name": "NES-Polish, Balancing und Phasenabschluss", "done": false}
+      ]
+    }
   ]
 }

@@ -24,7 +24,14 @@ Etappen als Unterpunkte. Jede abgeschlossene Phase erhält einen Git-Tag `phase-
 - 1.6 Game-Boy-Look & Polish (SubViewport 160×144, Tiles prozedural,
   GB-Palette in UI, EraTransition-Stub, TileMapLayer-Welt)
 
-## [Phase 2] – Ära 8-Bit-Farbe (geplant)
+## [Phase 2] – Ära 8-Bit-Farbe (NES) `laufend`
+### Hinzugefügt
+- 2.1 Ära-Wechsel und NES-Renderer (EraManager mit Runtime-Renderer-Tausch,
+  Era2Nes mit NES-Palette, TilesNES prozedural, 256×240-Viewport,
+  echte EraTransition-Animation ~1,5 s mit Eingabe-Lock,
+  Meilenstein 5× Eisenbarren → Ära 2, Multi-Phase progress.json,
+  EraUnlocks Core-Logik, Debug-Ärawechsel echt)
+
 ## [Phase 3] – Ära 16-Bit (geplant)
 ## [Phase 4] – Ära Isometrisch (geplant)
 ## [Phase 5] – Ära Früh-3D (geplant)

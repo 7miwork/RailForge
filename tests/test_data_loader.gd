@@ -4,7 +4,7 @@ extends GutTest
 func test_load_json_valid() -> void:
 	var data: Variant = DataLoader.load_json("res://data/progress.json")
 	assert_true(data is Dictionary)
-	assert_true(data.has("stages"))
+	assert_true(data.has("phases"))
 
 func test_load_json_array() -> void:
 	var data: Variant = DataLoader.load_json("res://data/items.json")

@@ -14,16 +14,37 @@ var main_ref: Node
 
 @onready var interaction_area: Area2D = $InteractionArea
 
+var _era := 1
+
 func _ready() -> void:
-	# Game-Boy-Sprite: 8×8 prozedural (Tiles), Nearest-Filter.
-	$Sprite2D.texture = Tiles.make_player()
-	$Sprite2D.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_apply_era_visuals()
+
+## Ära-Skin wechseln (Game Boy 8×8 ↔ NES 16×16), z. B. nach EraManager-Wechsel.
+func set_era(era: int) -> void:
+	_era = era
+	if is_inside_tree():
+		_apply_era_visuals()
+
+func _apply_era_visuals() -> void:
+	var sprite := get_node_or_null("Sprite2D") as Sprite2D
+	if sprite == null:
+		return
+	if _era >= 2:
+		sprite.texture = TilesNES.make_player()
+	else:
+		sprite.texture = Tiles.make_player()
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
 func setup(p_state: GameState, p_main: Node = null) -> void:
 	state = p_state
 	main_ref = p_main
 
 func _physics_process(_delta: float) -> void:
+	# Während der Ära-Transition ist die Eingabe gesperrt.
+	if EraTransition.input_locked:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
 	var input_vec := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = input_vec * speed
 	move_and_slide()

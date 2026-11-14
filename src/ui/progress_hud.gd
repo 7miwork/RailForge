@@ -39,14 +39,14 @@ func refresh() -> void:
 	var done := Progress.done_count()
 	var current := Progress.current_stage()
 
-	if total > 0 and done >= total:
-		# Alle Etappen erledigt: letzte Etappe als Name anzeigen.
+	if Progress.all_done():
+		# Alle Phasen/Etappen erledigt: letzten Etappennamen anzeigen.
 		var stages := Progress.all_stages()
 		var last_name := str(stages[stages.size() - 1].get("name", "")) if not stages.is_empty() else ""
-		stage_line.text = "Phase %d – alle Etappen abgeschlossen" % state.phase
+		stage_line.text = "Phase %d – alle Etappen abgeschlossen" % Progress.phase_number()
 		name_line.text = last_name
 	else:
-		stage_line.text = "Phase %d – Etappe %d/%d" % [state.phase, Progress.current_index(), total]
+		stage_line.text = "Phase %d – Etappe %d/%d" % [Progress.phase_number(), Progress.current_index(), total]
 		name_line.text = str(current.get("name", state.stage_name))
 
 	bar.min_value = 0.0

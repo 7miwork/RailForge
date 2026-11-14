@@ -106,13 +106,14 @@ func _on_add_resource(item_id: String) -> void:
 
 ## Etappen-Sektion: eine Zeile pro Etappe aus Progress.all_stages().
 func _build_stage_rows() -> void:
-	for stage: Dictionary in Progress.all_stages():
+	for stage: Dictionary in Progress.all_stage_entries():
 		var stage_id := str(stage.get("id", ""))
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 6)
 
 		var check := CheckBox.new()
 		check.text = stage_id
+		check.tooltip_text = "Phase %d" % int(stage.get("phase", 0))
 		check.add_theme_color_override("font_color", Tiles.GB_LIGHTEST)
 		check.add_theme_font_size_override("font_size", 10)
 		check.toggled.connect(_on_stage_toggled.bind(stage_id))

@@ -35,6 +35,8 @@ static func craft(recipe_id: String, inventory: Inventory, game_state: GameState
 	for input_entry: Dictionary in recipe.get("inputs", []):
 		inventory.remove_item(str(input_entry.get("item_id", "")), int(input_entry.get("amount", 0)))
 	inventory.add_item(output_item, output_amount, ItemDB.max_stack(output_item))
+	# Craft-Stat für Meilensteine (z. B. "crafted_iron_ingot" für Ära-Freischaltung).
+	game_state.add_stat("crafted_" + output_item, output_amount)
 	return {
 		"ok": true,
 		"reason": "ok",

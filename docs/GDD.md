@@ -33,6 +33,15 @@ Mechanik: Bewegen, Abbauen (Holz, Stein, Erz), Inventar (20 Slots), Crafting
 (Brett, Steinziegel, Steinspitzhacke, Eisenguss), Speichern/Laden, Debug-Overlay.
 
 
+## Ära 2 – 8-Bit-Farbe (NES)
+Farbe statt Game-Boy-Grün: NES-Palette (~17 Farben), 256×240-Auflösung.
+Ära-Wechsel per Meilenstein: 5 gecraftete Eisenbarren schalten Ära 2 frei
+(`EraUnlocks` prüft `eras.json`-Bedingungen gegen GameState-Stats).
+`EraManager` tauscht Renderer, Viewport-Auflösung und Welt-Skins
+(Tiles, Backdrop) live aus; `EraTransition` spielt eine ~1,5-s-Flacker-
+Animation mit Eingabe-Lock. Fortlaufend: Skills, Bau-Modus, Miner,
+Förderbänder, Schmelzofen (Etappen 2.2–2.5).
+
 ## Etappen-System
 Jede Phase ist in Etappen (Schritte) unterteilt. Jede Etappe hat ein Done-Kriterium.
 Eine Fortschrittsanzeige im Spiel zeigt Phase + Etappe an.

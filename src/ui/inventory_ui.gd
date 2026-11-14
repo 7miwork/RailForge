@@ -45,6 +45,9 @@ func _build_slots() -> void:
 
 func _process(_delta: float) -> void:
 	# Polling statt _unhandled_input: Touch-Button nutzt Input.action_press().
+	# Während der Ära-Transition ist die Eingabe gesperrt.
+	if EraTransition.input_locked:
+		return
 	if Input.is_action_just_pressed("inventory_toggle"):
 		visible = not visible
 
