@@ -3,12 +3,7 @@ extends CanvasLayer
 ## Fortschrittsanzeige (oben links): Etappenzähler, Etappenname,
 ## Fortschrittsbalken und Ressourcen-Kompaktanzeige – alles aus
 ## Progress (statisch) und GameState. Plus temporäre flash()/toast()-Nachrichten.
-## Game-Boy-Palette als Platzhalter (echte Optik ab Etappe 1.6).
-
-const COLOR_BG := Color("#9bbc0f")
-const COLOR_TEXT := Color("#0f380f")
-const COLOR_BAR_BG := Color("#9bbc0f")
-const COLOR_BAR_FILL := Color("#0f380f")
+## Game-Boy-Palette (GBStyle/Tiles).
 
 @onready var stage_line: Label = $Panel/VBox/StageLine
 @onready var name_line: Label = $Panel/VBox/NameLine
@@ -23,21 +18,15 @@ var _toast_tween: Tween
 
 func _ready() -> void:
 	add_to_group("progress_hud")
-	var style := StyleBoxFlat.new()
-	style.bg_color = COLOR_BG
-	style.set_content_margin_all(8.0)
-	$Panel.add_theme_stylebox_override("panel", style)
+	$Panel.add_theme_stylebox_override("panel", GBStyle.panel())
+	toast_panel.add_theme_stylebox_override("panel", GBStyle.box(Tiles.GB_LIGHT))
 	for l: Label in [stage_line, name_line, stats_line, flash_label, toast_label]:
-		l.add_theme_color_override("font_color", COLOR_TEXT)
-	bar.add_theme_stylebox_override("background", _flat_style(COLOR_BAR_BG))
-	bar.add_theme_stylebox_override("fill", _flat_style(COLOR_BAR_FILL))
+		l.add_theme_color_override("font_color", Tiles.GB_DARKEST)
+		l.add_theme_font_size_override("font_size", 8)
+	bar.add_theme_stylebox_override("background", GBStyle.box(Tiles.GB_LIGHT))
+	bar.add_theme_stylebox_override("fill", GBStyle.box(Tiles.GB_DARK, false))
 	toast_panel.visible = false
 	toast_panel.modulate.a = 1.0
-
-func _flat_style(color: Color) -> StyleBoxFlat:
-	var s := StyleBoxFlat.new()
-	s.bg_color = color
-	return s
 
 func setup(p_state: GameState) -> void:
 	state = p_state

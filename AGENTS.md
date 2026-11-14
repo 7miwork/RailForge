@@ -60,5 +60,6 @@ Kommentare Deutsch, Variablen/Funktionen Englisch (snake_case), kleine Dateien, 
 Siehe `docs/PHASEN_GUIDE.md`.
 
 ## Aktueller Stand
-Phase 0 (Fundament und Dokumente): erledigt, wartet auf Freigabe.
-Nächste: Phase 1 – Etappe 1.1 (Bewegung & Kamera).
+Phase 1 (Ära Monochrom): abgeschlossen, Tag `phase-1-monochrom`,
+wartet auf manuelle Abnahme.
+Nächste: Phase 2 – Etappe 2.1 (wird bei Freigabe festgelegt).

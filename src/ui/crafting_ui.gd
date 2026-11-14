@@ -2,13 +2,9 @@ class_name CraftingUI
 extends CanvasLayer
 ## Crafting-UI: Liste aller Rezepte (freigeschaltet + gesperrt),
 ## Kostenanzeige, Craft-Button pro Rezept. Per "crafting_toggle" (C / Touch)
-## ein-/ausblendbar. Startet ausgeblendet.
+## ein-/ausblendbar. Startet ausgeblendet. Game-Boy-Palette.
 
 signal crafted(recipe_id: String)
-
-const COLOR_BG := Color("#9bbc0f")
-const COLOR_TEXT := Color("#0f380f")
-const COLOR_LOCKED := Color(0.35, 0.35, 0.35, 1)
 
 var game_state: GameState
 
@@ -17,10 +13,7 @@ var _vbox: VBoxContainer
 func _ready() -> void:
 	add_to_group("crafting_ui")
 	_vbox = $Panel/Scroll/VBox
-	var style := StyleBoxFlat.new()
-	style.bg_color = COLOR_BG
-	style.set_content_margin_all(10.0)
-	$Panel.add_theme_stylebox_override("panel", style)
+	$Panel.add_theme_stylebox_override("panel", GBStyle.panel())
 	visible = false
 
 func bind(p_state: GameState) -> void:
@@ -47,20 +40,23 @@ func _build_row(recipe: Dictionary) -> HBoxContainer:
 	var unlocked := RecipeDB.is_unlocked(recipe, game_state)
 	var label := Label.new()
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.add_theme_color_override("font_color", COLOR_TEXT if unlocked else COLOR_LOCKED)
+	label.add_theme_color_override("font_color", Tiles.GB_DARKEST if unlocked else Tiles.GB_DARK)
+	label.add_theme_font_size_override("font_size", 10)
 	label.text = _recipe_text(recipe, unlocked)
 	row.add_child(label)
 
 	var button := Button.new()
 	button.text = "Craften"
+	GBStyle.apply_button(button)
 	button.disabled = not Crafting.can_craft(str(recipe.get("id", "")), game_state.inventory, game_state)
 	button.pressed.connect(_on_craft_pressed.bind(str(recipe.get("id", ""))))
 	row.add_child(button)
 	return row
 
 func _recipe_text(recipe: Dictionary, unlocked: bool) -> String:
-	var name := ItemDB.display_name(str(recipe.get("output", {}).get("item_id", "")))
-	var output_amount := int(recipe.get("output", {}).get("amount", 1))
+	var output: Dictionary = recipe.get("output", {})
+	var name := ItemDB.display_name(str(output.get("item_id", "")))
+	var output_amount := int(output.get("amount", 1))
 	var prefix := "%s" % name
 	if output_amount > 1:
 		prefix += " x%d" % output_amount

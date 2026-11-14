@@ -8,20 +8,20 @@ func after_each() -> void:
 	Progress._reload_for_test()
 
 func test_counts() -> void:
-	# data/progress.json: 1.1–1.4 done, 1.5 aktuell, 1.6 offen.
+	# data/progress.json: 1.1–1.5 done, 1.6 aktuell (Phase 1 fast abgeschlossen).
 	assert_eq(Progress.total_count(), 6)
-	assert_eq(Progress.done_count(), 4)
-	assert_almost_eq(Progress.progress_ratio(), 4.0 / 6.0, 0.001)
+	assert_eq(Progress.done_count(), 5)
+	assert_almost_eq(Progress.progress_ratio(), 5.0 / 6.0, 0.001)
 
 func test_current_stage() -> void:
-	assert_eq(Progress.current_stage_id(), "1.5")
-	assert_eq(Progress.current_stage_name(), "Fortschrittsanzeige & GUT-Tests")
+	assert_eq(Progress.current_stage_id(), "1.6")
+	assert_eq(Progress.current_stage_name(), "Game-Boy-Look & Polish")
 	var stage := Progress.current_stage()
-	assert_eq(str(stage.get("id")), "1.5")
+	assert_eq(str(stage.get("id")), "1.6")
 	assert_false(bool(stage.get("done")))
 
 func test_current_index() -> void:
-	assert_eq(Progress.current_index(), 5)
+	assert_eq(Progress.current_index(), 6)
 
 func test_stage_by_id() -> void:
 	assert_eq(str(Progress.stage_by_id("1.3").get("name")), "Handcrafting")
@@ -29,13 +29,13 @@ func test_stage_by_id() -> void:
 
 func test_is_done() -> void:
 	assert_true(Progress.is_done("1.1"))
-	assert_true(Progress.is_done("1.4"))
+	assert_true(Progress.is_done("1.5"))
 	assert_false(Progress.is_done("1.6"))
 
-func test_mark_done_advances() -> void:
-	Progress.mark_done("1.5")
-	assert_eq(Progress.current_stage_id(), "1.6")
-	assert_eq(Progress.current_stage_name(), "Game-Boy-Look & Polish")
+func test_mark_done_advances_to_all_done() -> void:
+	Progress.mark_done("1.6")
+	assert_eq(Progress.current_stage_id(), "")
+	assert_eq(Progress.current_index(), 7) # total_count + 1
 
 func test_all_done_state() -> void:
 	for stage: Dictionary in Progress.all_stages():

@@ -4,7 +4,7 @@ Etappen als Unterpunkte. Jede abgeschlossene Phase erhält einen Git-Tag `phase-
 
 ## [Unreleased]
 
-## [Phase 0] – Fundament
+## [Phase 0] – Fundament `tag: phase-0-fundament`
 ### Hinzugefügt
 - Godot-4-Projekt (GL Compatibility), Platzhalter-Szene
 - `GameState`, `DataLoader`, `EraRenderer`-Basisklasse, `data/eras.json`
@@ -13,14 +13,16 @@ Etappen als Unterpunkte. Jede abgeschlossene Phase erhält einen Git-Tag `phase-
 - Etappen-Konzept und Fortschrittsanzeige in Docs/Regeln verankert
 - Git-Strategie: nur `main`, Commit pro Etappe, Tag pro Phase
 
-## [Phase 1] – Ära Monochrom (geplant, Etappen siehe PHASEN_GUIDE)
-### Geplant
-- 1.1 Bewegung & Kamera
-- 1.2 Handabbau & Inventar
-- 1.3 Handcrafting
-- 1.4 Speichern/Laden & Debug-Menü
-- 1.5 Fortschrittsanzeige & GUT-Tests
-- 1.6 Game-Boy-Look & Polish
+## [Phase 1] – Ära Monochrom (Game Boy) ✅ `tag: phase-1-monochrom`
+### Hinzugefügt
+- 1.1 Bewegung & Kamera (Input-Map, Camera2D-Smoothing, virtueller Joystick)
+- 1.2 Handabbau & Inventar (ItemDB, Inventory 20 Slots, ResourceNode, Mining)
+- 1.3 Handcrafting (RecipeDB, Crafting transaktional, Crafting-UI, Stats)
+- 1.4 Speichern/Laden & Debug-Menü (SaveManager user://save.json, Debug-Overlay)
+- 1.5 Fortschrittsanzeige & GUT-Tests (Progress statisch, HUD 4-zeilig,
+  Milestone-Toasts, Coverage-Report, Edge Cases)
+- 1.6 Game-Boy-Look & Polish (SubViewport 160×144, Tiles prozedural,
+  GB-Palette in UI, EraTransition-Stub, TileMapLayer-Welt)
 
 ## [Phase 2] – Ära 8-Bit-Farbe (geplant)
 ## [Phase 3] – Ära 16-Bit (geplant)

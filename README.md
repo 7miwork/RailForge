@@ -6,8 +6,8 @@ Die Grafik entwickelt sich im Spielverlauf von Game-Boy-Monochrom bis modernem 3
 Entwickelt mit Godot 4. Läuft zuerst auf Windows, macOS und Linux, später Android und iOS.
 
 ## Status
-Phase 0 (Fundament, nur Struktur) – siehe [docs/PHASEN_GUIDE.md](docs/PHASEN_GUIDE.md).
-Phase 1 ist in Etappen 1.1–1.6 gegliedert.
+Phase 1 (Ära Monochrom) abgeschlossen – Tag `phase-1-monochrom`.
+Siehe [docs/PHASEN_GUIDE.md](docs/PHASEN_GUIDE.md) für den Phasenplan.
 
 ## Starten
 Godot 4.3+ öffnen → Importieren → `project.godot` → F5.

@@ -1,12 +1,10 @@
 class_name InventoryUI
 extends CanvasLayer
 ## Inventar-UI: 20 Slots (5x4), mittig, per "inventory_toggle" (I / Touch-Button)
-## ein-/ausblendbar. Startet ausgeblendet.
+## ein-/ausblendbar. Startet ausgeblendet. Game-Boy-Palette.
 
 const SLOT_COUNT := Inventory.MAX_SLOTS
 const COLUMNS := 5
-const COLOR_EMPTY := Color("#2f4f2f")
-const COLOR_TEXT := Color("#0f380f")
 
 var inventory: Inventory
 
@@ -18,6 +16,7 @@ var _slot_styles: Array[StyleBoxFlat] = []
 func _ready() -> void:
 	add_to_group("inventory_ui")
 	_grid = $Panel/Grid
+	$Panel.add_theme_stylebox_override("panel", GBStyle.panel())
 	_build_slots()
 	visible = false
 
@@ -29,16 +28,14 @@ func _build_slots() -> void:
 	for i in SLOT_COUNT:
 		var panel := PanelContainer.new()
 		panel.custom_minimum_size = Vector2(56, 56)
-		var style := StyleBoxFlat.new()
-		style.bg_color = COLOR_EMPTY
-		style.set_content_margin_all(4.0)
+		var style := GBStyle.box(Tiles.GB_DARK)
 		panel.add_theme_stylebox_override("panel", style)
 
 		var label := Label.new()
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		label.autowrap_mode = TextServer.AUTOWRAP_OFF
-		label.add_theme_color_override("font_color", COLOR_TEXT)
+		label.add_theme_color_override("font_color", Tiles.GB_DARKEST)
+		label.add_theme_font_size_override("font_size", 10)
 		panel.add_child(label)
 
 		_grid.add_child(panel)
@@ -61,7 +58,7 @@ func refresh() -> void:
 		var style := _slot_styles[i]
 		if item_id.is_empty():
 			label.text = ""
-			style.bg_color = COLOR_EMPTY
+			style.bg_color = Tiles.GB_DARK # leer = gedimmt
 		else:
 			label.text = "%s\nx%d" % [ItemDB.display_name(item_id), int(slot.get("amount", 0))]
-			style.bg_color = ItemDB.color(item_id)
+			style.bg_color = Tiles.GB_LIGHT

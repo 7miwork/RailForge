@@ -2,14 +2,12 @@ class_name DebugOverlay
 extends CanvasLayer
 ## Debug-Overlay (nur Entwicklung): Ära wechseln, Ressourcen +10,
 ## Etappen-Fortschritt (Dev), Save löschen, letzter Speicherzeitpunkt.
-## Reine UI, keine Core-Logik.
+## Reine UI, keine Core-Logik. Game-Boy-Palette.
 
 signal era_changed(era_id: int)
 signal state_changed
 signal reset_requested
 
-const COLOR_BG := Color(0.15, 0.15, 0.15, 0.9)
-const COLOR_TEXT := Color(0.9, 0.9, 0.9)
 const RESOURCE_ITEMS: Array[String] = ["wood", "stone", "iron_ore"]
 
 var game_state: GameState
@@ -26,10 +24,23 @@ var _stage_checks: Dictionary = {} # stage_id -> CheckBox
 
 func _ready() -> void:
 	add_to_group("debug_overlay")
+	# Dunkles Panel in GB-DARKEST (alpha), helle Schrift.
 	var style := StyleBoxFlat.new()
-	style.bg_color = COLOR_BG
+	style.bg_color = Color(Tiles.GB_DARKEST, 0.92)
+	style.border_color = Tiles.GB_DARK
+	style.set_border_width_all(2)
 	style.set_content_margin_all(10.0)
 	$Panel.add_theme_stylebox_override("panel", style)
+	# Statische Labels/Buttons aus der Szene ebenfalls in GB-Palette bringen.
+	for l: Label in find_children("*", "Label", true, false):
+		l.add_theme_color_override("font_color", Tiles.GB_LIGHTEST)
+		l.add_theme_font_size_override("font_size", 10)
+	for b: Button in [
+		$Panel/VBox/DeleteButton,
+		$Panel/VBox/StageButtons/NextStageButton,
+		$Panel/VBox/StageButtons/ResetProgressButton,
+	]:
+		GBStyle.apply_button(b, Tiles.GB_DARK, Tiles.GB_LIGHTEST)
 	_build_eras()
 	_build_item_buttons()
 	_build_stage_rows()
@@ -83,6 +94,7 @@ func _build_item_buttons() -> void:
 	for item_id in RESOURCE_ITEMS:
 		var btn := Button.new()
 		btn.text = "+10 %s" % ItemDB.display_name(item_id)
+		GBStyle.apply_button(btn, Tiles.GB_DARK, Tiles.GB_LIGHTEST)
 		btn.pressed.connect(_on_add_resource.bind(item_id))
 		item_box.add_child(btn)
 
@@ -101,12 +113,16 @@ func _build_stage_rows() -> void:
 
 		var check := CheckBox.new()
 		check.text = stage_id
+		check.add_theme_color_override("font_color", Tiles.GB_LIGHTEST)
+		check.add_theme_font_size_override("font_size", 10)
 		check.toggled.connect(_on_stage_toggled.bind(stage_id))
 		row.add_child(check)
 
 		var label := Label.new()
 		label.text = str(stage.get("name", ""))
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.add_theme_color_override("font_color", Tiles.GB_LIGHTEST)
+		label.add_theme_font_size_override("font_size", 10)
 		row.add_child(label)
 
 		stage_list.add_child(row)

@@ -24,6 +24,15 @@ Factorio, Satisfactory, Dyson Sphere Program (Automatisierung), Transport Tycoon
 Spielstand und Logik sind ären-unabhängig. Nur der Renderer wird getauscht.
 Meilensteine lösen den Wechsel live aus, mit Übergangsanimation.
 
+## Ära 1 – Monochrom (Game Boy)
+Erster spielbarer Stand: reine Handarbeit ohne Maschinen.
+Optik im Game-Boy-Stil: 4-Grün-Palette (`#0f380f`, `#306230`, `#8bac0f`, `#9bbc0f`),
+16×16-Tiles, 8×8-Spieler, Low-Res-Rendering via 160×144-SubViewport mit Integer-Scaling.
+Alle Texturen werden zur Laufzeit prozedural erzeugt – keine binären Assets im Repo.
+Mechanik: Bewegen, Abbauen (Holz, Stein, Erz), Inventar (20 Slots), Crafting
+(Brett, Steinziegel, Steinspitzhacke, Eisenguss), Speichern/Laden, Debug-Overlay.
+
+
 ## Etappen-System
 Jede Phase ist in Etappen (Schritte) unterteilt. Jede Etappe hat ein Done-Kriterium.
 Eine Fortschrittsanzeige im Spiel zeigt Phase + Etappe an.

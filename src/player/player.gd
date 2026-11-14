@@ -15,10 +15,9 @@ var main_ref: Node
 @onready var interaction_area: Area2D = $InteractionArea
 
 func _ready() -> void:
-	# Platzhalter-Sprite: 16x16 farbiges Rechteck (echte Assets ab späteren Etappen).
-	var image := Image.create(16, 16, false, Image.FORMAT_RGBA8)
-	image.fill(Color("#2f5d2f"))
-	$Sprite2D.texture = ImageTexture.create_from_image(image)
+	# Game-Boy-Sprite: 8×8 prozedural (Tiles), Nearest-Filter.
+	$Sprite2D.texture = Tiles.make_player()
+	$Sprite2D.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
 func setup(p_state: GameState, p_main: Node = null) -> void:
 	state = p_state

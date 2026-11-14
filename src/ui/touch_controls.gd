@@ -23,6 +23,7 @@ func _ready() -> void:
 		or OS.has_feature("editor")
 	)
 	visible = controls_visible
+	modulate.a = 0.85 # halbtransparent (Game-Boy-Look)
 	_center = size * 0.5
 	if controls_visible:
 		_make_action_button("debug_toggle", "F1", 0.0)
@@ -41,6 +42,9 @@ func _make_action_button(action: StringName, text: String, y_offset: float) -> v
 	btn.text = text
 	btn.focus_mode = Control.FOCUS_NONE
 	btn.custom_minimum_size = Vector2(BUTTON_SIZE, BUTTON_SIZE)
+	# Game-Boy-Stil: dunkler Button, helle Schrift.
+	GBStyle.apply_button(btn, Tiles.GB_DARKEST, Tiles.GB_LIGHTEST)
+	btn.add_theme_font_size_override("font_size", 14)
 	# Unten rechts im UI-Canvas (Elternteil ist die UI-CanvasLayer).
 	btn.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 	btn.offset_left = -BUTTON_SIZE - 16.0
@@ -49,6 +53,7 @@ func _make_action_button(action: StringName, text: String, y_offset: float) -> v
 	btn.offset_bottom = -16.0 - y_offset
 	btn.button_down.connect(func() -> void: Input.action_press(action))
 	btn.button_up.connect(func() -> void: Input.action_release(action))
+	btn.modulate.a = 0.85
 	# Deferred: _ready läuft während des Szenen-Setups, add_child wäre sonst blockiert.
 	get_parent().add_child.call_deferred(btn)
 
@@ -117,10 +122,11 @@ func _set_axis(positive: StringName, negative: StringName, value: float) -> void
 		Input.action_release(negative)
 
 func _draw() -> void:
-	# Basisring
-	draw_arc(_center, RADIUS, 0.0, TAU, 48, Color(1, 1, 1, 0.6), 3.0)
-	draw_circle(_center, RADIUS * 0.25, Color(1, 1, 1, 0.15))
-	# Knopf
+	# Basis: GB_DARK-Fläche, GB_DARKEST-Rand (Game-Boy-Palette).
+	draw_circle(_center, RADIUS, Color(Tiles.GB_DARK, 0.4))
+	draw_arc(_center, RADIUS, 0.0, TAU, 48, Tiles.GB_DARKEST, 3.0)
+	draw_circle(_center, RADIUS * 0.25, Color(Tiles.GB_DARKEST, 0.5))
+	# Knopf: GB_LIGHTEST mit GB_DARKEST-Rand.
 	var knob := _center + _knob_offset
-	draw_circle(knob, KNOB_RADIUS, Color(1, 1, 1, 0.75))
-	draw_arc(knob, KNOB_RADIUS, 0.0, TAU, 32, Color(1, 1, 1, 0.9), 2.0)
+	draw_circle(knob, KNOB_RADIUS, Tiles.GB_LIGHTEST)
+	draw_arc(knob, KNOB_RADIUS, 0.0, TAU, 32, Tiles.GB_DARKEST, 2.0)

@@ -1,10 +1,11 @@
 extends Node
 ## Einstiegspunkt. Verdrahtet GameState (mit Save/Load), Progress,
 ## Ära-Renderer, HUD, Inventar-UI, Crafting-UI, Debug-Overlay und Touch-Steuerung.
+## Die Welt (Ground, Player, ResourceNodes, Camera2D) liegt im SubViewport
+## von WorldView (160×144, Game-Boy-Auflösung).
 
-@onready var world: Node2D = $World
-@onready var player: Player = $World/Player
-@onready var camera: Camera2D = $Camera2D
+@onready var player: Player = $WorldView/Viewport/World/Player
+@onready var camera: Camera2D = $WorldView/Viewport/World/Camera2D
 @onready var progress_hud: ProgressHud = $UI/ProgressHud
 @onready var inventory_ui: InventoryUI = $UI/InventoryUI
 @onready var crafting_ui: CraftingUI = $UI/CraftingUI
@@ -104,8 +105,8 @@ func on_resource_mined(result: Dictionary) -> void:
 		progress_hud.toast("Freigeschaltet: %s" % ItemDB.display_name(item_id))
 
 func on_era_changed(era_id: int) -> void:
-	# In Etappe 1.5 nur Spielstand-Feld + Log; echter Renderer-Tausch
-	# kommt in späteren Phasen.
+	# In Etappe 1.6 nur Spielstand-Feld + Log; echter Renderer-Tausch
+	# kommt in Phase 2 (EraTransition ist noch Stub).
 	state.era = era_id
 	print("Debug: Ära gewechselt zu %d" % era_id)
 	progress_hud.flash("Ära %d (Debug)" % era_id)

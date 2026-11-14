@@ -1,62 +1,37 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1"]
-[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/resources/resource_node.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://scenes/ui/progress_hud.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://scenes/ui/inventory_ui.tscn" id="6"]
-[ext_resource type="PackedScene" path="res://scenes/ui/crafting_ui.tscn" id="7"]
-[ext_resource type="PackedScene" path="res://scenes/ui/debug_overlay.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/world_view.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/ui/progress_hud.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_ui.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/ui/crafting_ui.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/ui/debug_overlay.tscn" id="7"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1")
 
-[node name="World" type="Node2D" parent="."]
-
-[node name="Ground" type="ColorRect" parent="World"]
-offset_right = 2000.0
-offset_bottom = 2000.0
-mouse_filter = 2
-color = Color(0.545098, 0.67451, 0.058824, 1)
-
-[node name="WoodNode" parent="World" instance=ExtResource("3")]
-position = Vector2(200, 200)
-item_id = "wood"
-amount = 5
-amount_per_hit = 1
-
-[node name="StoneNode" parent="World" instance=ExtResource("3")]
-position = Vector2(400, 300)
-item_id = "stone"
-amount = 5
-amount_per_hit = 1
-
-[node name="IronNode" parent="World" instance=ExtResource("3")]
-position = Vector2(600, 250)
-item_id = "iron_ore"
-amount = 5
-amount_per_hit = 1
-
-[node name="Player" parent="World" instance=ExtResource("2")]
-position = Vector2(1000, 1000)
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position_smoothing_enabled = true
-position_smoothing_speed = 5.0
-limit_left = 0
-limit_top = 0
-limit_right = 2000
-limit_bottom = 2000
+[node name="WorldView" parent="." instance=ExtResource("2")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -360.0
+offset_right = 400.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="ProgressHud" parent="UI" instance=ExtResource("4")]
+[node name="ProgressHud" parent="UI" instance=ExtResource("3")]
 
-[node name="InventoryUI" parent="UI" instance=ExtResource("6")]
+[node name="InventoryUI" parent="UI" instance=ExtResource("5")]
 
-[node name="CraftingUI" parent="UI" instance=ExtResource("7")]
+[node name="CraftingUI" parent="UI" instance=ExtResource("6")]
 
-[node name="DebugOverlay" parent="UI" instance=ExtResource("8")]
+[node name="DebugOverlay" parent="UI" instance=ExtResource("7")]
 
-[node name="TouchControls" parent="UI" instance=ExtResource("5")]
+[node name="TouchControls" parent="UI" instance=ExtResource("4")]

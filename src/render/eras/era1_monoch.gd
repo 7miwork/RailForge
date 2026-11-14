@@ -1,12 +1,27 @@
 class_name Era1Monoch
 extends EraRenderer
 ## Renderer für Ära 1 (Monochrom / Game Boy).
-## In Etappe 1.3: Mechanik (Abbau, Inventar, Crafting) + HUD/Inventar/Crafting-UI.
-## Game-Boy-Optik (4 Grünstufen, Tiles) kommt in Etappe 1.6.
+## Game-Boy-Palette (4 Farben), 160×144-SubViewport, prozedurale Tiles.
+## EraTransition-Child ist vorbereitet; play_to_era() ist in Phase 1 noch No-op.
+
+const GB_DARKEST := Color("#0f380f")
+const GB_DARK := Color("#306230")
+const GB_LIGHT := Color("#8bac0f")
+const GB_LIGHTEST := Color("#9bbc0f")
+
+var transition: EraTransition
+
+func get_palette() -> Array[Color]:
+	return [GB_DARKEST, GB_DARK, GB_LIGHT, GB_LIGHTEST]
 
 func mount(parent: Node) -> void:
 	parent.add_child(self)
-	RenderingServer.set_default_clear_color(Color("#8bac0f"))
+	# Root-Viewport-Clear = schwarz (Letterbox); die Welt selbst nutzt
+	# GB_LIGHT als Backdrop-Farbe im SubViewport.
+	RenderingServer.set_default_clear_color(Color.BLACK)
+	transition = EraTransition.new()
+	transition.name = "EraTransition"
+	add_child(transition)
 
 func draw_state(_state: GameState) -> void:
 	if not is_inside_tree():

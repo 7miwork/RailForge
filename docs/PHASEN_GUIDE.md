@@ -16,35 +16,35 @@ Jede Etappe hat ein sichtbares Done-Kriterium und wird im Spiel als Fortschritt 
 - **Done:** Projekt öffnet in Godot 4.3+ und zeigt „Railforge – Phase 0", alle Dokumente vorhanden.
 - **Test:** Godot → Importieren → `project.godot` → F5.
 
-## Phase 1 – Ära Monochrom (Game Boy) ⬜ `tag: phase-1-monochrom`
+## Phase 1 – Ära Monochrom (Game Boy) ✅ `tag: phase-1-monochrom`
 Die Phase ist in Etappen unterteilt. Jede Etappe ist ein eigener Commit mit Done-Kriterium.
 Die Etappen bauen aufeinander auf; der Spielstand bleibt zwischen Etappen erhalten.
 Eine Fortschrittsanzeige im Spiel zeigt Phase und Etappe.
 
-### Etappe 1.1 – Bewegung & Kamera ⬜
+### Etappe 1.1 – Bewegung & Kamera ✅
 - Spieler-Figur, Bewegung über Input-Map (Tastatur + Touch), Kamera folgt.
 - Fortschrittsanzeige: zeigt „Phase 1 – Etappe 1.1".
 - **Done:** Spieler bewegt sich in alle Richtungen, Touch funktioniert.
 
-### Etappe 1.2 – Handabbau & Inventar ⬜
+### Etappe 1.2 – Handabbau & Inventar ✅
 - Ressourcen per Hand abbauen, Inventar mit Slots und Stack-Größen.
 - **Done:** Abbauen füllt Inventar, Inventar-UI zeigt Items.
 
-### Etappe 1.3 – Handcrafting ⬜
+### Etappe 1.3 – Handcrafting ✅
 - Rezepte als JSON in `data/`, Crafting-UI, Freischalten einfacher Rezepte.
 - **Done:** Spieler crafted ein Item aus abgebauten Ressourcen.
 
-### Etappe 1.4 – Speichern/Laden & Debug-Menü ⬜
+### Etappe 1.4 – Speichern/Laden & Debug-Menü ✅
 - Speichern mit Versionsnummer in `user://`, Laden beim Start.
 - Debug-Menü: Ära wechseln, Ressourcen cheaten.
 - **Done:** Spielstand übersteht Neustart, Debug-Menü funktioniert.
 
-### Etappe 1.5 – Fortschrittsanzeige & GUT-Tests ⬜
+### Etappe 1.5 – Fortschrittsanzeige & GUT-Tests ✅
 - Sichtbare Fortschrittsanzeige (Phase + Etappe) aus dem Spielstand.
 - Erste GUT-Tests für Core-Logik (Inventar, Crafting, Save/Load).
 - **Done:** Anzeige korrekt, Tests grün.
 
-### Etappe 1.6 – Game-Boy-Look & Polish ⬜
+### Etappe 1.6 – Game-Boy-Look & Polish ✅
 - 4 Grünstufen, 2D-Tiles, top-down, Übergangsanimation zum Ära-Wechsel vorbereiten.
 - **Done:** Ära 1 sieht wie Game Boy aus, spielbar von Start bis Etappe 1.6.
 
